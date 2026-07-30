@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raka & Cia Wedding</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        burgundy: '#4A1525',
-                        olive: '#556B2F',
-                        chocolate: '#362017',
-                        ivory: '#F7F5F0',
-                        deepblack: '#121212',
-                        charcoal: '#1A1A1A',
-                        goldacc: '#D4AF37'
+                        burgundy: '#4A1525', olive: '#556B2F', chocolate: '#362017',
+                        ivory: '#F7F5F0', deepblack: '#121212', charcoal: '#1A1A1A', goldacc: '#D4AF37'
                     },
                     fontFamily: {
                         cherolina: ['"Great Vibes"', 'cursive', 'serif']
@@ -30,9 +30,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #121212; color: #F7F5F0; }
         .font-serif { font-family: 'Playfair Display', serif; }
         .font-cherolina { font-family: 'Great Vibes', cursive, serif; }
-        .disposable-filter {
-            filter: contrast(1.15) saturate(0.8) sepia(0.2);
-        }
+        .disposable-filter { filter: contrast(1.15) saturate(0.8) sepia(0.2); }
         .page-section { display: none; }
         .page-section.active { display: flex; }
     </style>
@@ -66,20 +64,18 @@
         </div>
     </div>
 
-    <!-- PAGE 2: Camera View (Multi-upload & Bersih tanpa label atas) -->
+    <!-- PAGE 2: Camera View -->
     <div id="section-upload" class="page-section w-screen h-screen flex-col justify-between bg-black text-white p-5 relative">
         <div class="flex justify-between items-center z-10 pt-2">
             <button onclick="switchPage('home')" class="text-xs bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-md cursor-pointer">✕ Close</button>
-            <div class="text-center">
-                <p class="text-xs font-serif font-bold tracking-wider">Raka & Cia Wedding day</p>
-            </div>
+            <div class="text-center"><p class="text-xs font-serif font-bold tracking-wider">Raka & Cia Wedding day</p></div>
             <div class="w-10"></div>
         </div>
 
         <div class="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center items-center py-2">
             <div id="viewfinderBox" class="w-full aspect-[3/4] bg-neutral-900 rounded-3xl overflow-hidden relative border border-white/10 shadow-2xl flex items-center justify-center">
                 <div id="previewPlaceholder" class="text-center p-6">
-                    <svg class="w-12 h-12 mx-auto text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
+                    <svg class="w-12 h-12 mx-auto text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     <p class="text-xs text-gray-400">Tap shutter below to snap or load from gallery</p>
                 </div>
                 <img id="imagePreviewElement" class="w-full h-full object-cover disposable-filter hidden" alt="Preview">
@@ -90,27 +86,19 @@
             <input type="text" id="guestName" placeholder="Your Name (e.g., Sarah)" class="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-goldacc text-center" required>
             
             <div class="flex items-center justify-around">
-                <!-- Tombol pilih banyak foto dari galeri (multiple) -->
-                <label class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center cursor-pointer border border-neutral-700 hover:bg-neutral-700 transition" title="Upload from Gallery">
-                    📁
-                    <input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleFileSelect(this)">
+                <label class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center cursor-pointer border border-neutral-700 hover:bg-neutral-700 transition">
+                    📁 <input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleFileSelect(this)">
                 </label>
-
-                <!-- Tombol Shutter Kamera (bisa ambil foto/multi) -->
                 <label class="w-16 h-16 rounded-full border-4 border-white flex items-center justify-center cursor-pointer p-1 bg-transparent hover:scale-105 transition">
                     <div class="w-12 h-12 bg-white rounded-full"></div>
                     <input type="file" id="cameraFile" accept="image/*" capture="environment" multiple class="hidden" onchange="handleFileSelect(this)">
                 </label>
-
-                <!-- Tombol Kirim -->
-                <button onclick="submitPhotos()" class="w-10 h-10 rounded-full bg-goldacc text-black flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-goldacc/90 transition" title="Send Photos">
-                    ✓
-                </button>
+                <button onclick="submitPhotos()" class="w-10 h-10 rounded-full bg-goldacc text-black flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-goldacc/90 transition">✓</button>
             </div>
         </div>
     </div>
 
-    <!-- PAGE 3: Live Shared Gallery Grid dengan Komentar & Like Aktif -->
+    <!-- PAGE 3: Live Shared Gallery -->
     <div id="section-gallery" class="page-section w-screen min-h-screen bg-black text-white flex-col justify-start p-3 sm:p-5">
         <div class="max-w-4xl w-full mx-auto relative pt-2">
             <div class="flex justify-between items-center mb-4 px-2">
@@ -119,69 +107,74 @@
                 <button onclick="switchPage('upload')" class="text-xs bg-goldacc text-black px-3 py-1.5 rounded-full font-bold cursor-pointer hover:bg-goldacc/90">+ Camera</button>
             </div>
 
-            <!-- Grid Galeri -->
             <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Konten Galeri dimuat dinamis dari localStorage -->
+                <!-- Foto dari Supabase akan otomatis muncul di sini -->
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Logika & Sinkronisasi Real-Time -->
+    <!-- SCRIPT INTEGRASI SUPABASE -->
     <script>
+        const SUPABASE_URL = 'https://lrlsayucicksnojxhfho.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_d_X-QdhAYslMbxYTU8ZTUQ_RLLvrqma';
+
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let stagedFiles = [];
 
         function switchPage(pageId) {
             const sections = document.querySelectorAll('.page-section');
             sections.forEach(sec => sec.classList.remove('active'));
-            
             const target = document.getElementById('section-' + pageId);
             if (target) {
                 target.classList.add('active');
                 window.scrollTo(0, 0);
-                if(pageId === 'gallery') renderGallery();
+                if(pageId === 'gallery') fetchLiveGallery();
             }
         }
 
         function handleFileSelect(input) {
             if (input.files && input.files.length > 0) {
                 stagedFiles = Array.from(input.files);
-                
                 const previewImg = document.getElementById('imagePreviewElement');
                 const placeholder = document.getElementById('previewPlaceholder');
-                
-                // Tampilkan preview foto pertama yang dipilih
                 previewImg.src = URL.createObjectURL(stagedFiles[0]);
                 previewImg.classList.remove('hidden');
                 placeholder.classList.add('hidden');
             }
         }
 
-        function submitPhotos() {
+        async function submitPhotos() {
             const guestName = document.getElementById('guestName').value.trim() || 'Guest';
-            
             if (stagedFiles.length === 0) {
                 alert('Please take or select at least one photo first!');
                 return;
             }
 
-            let existingData = JSON.parse(localStorage.getItem('wedding_gallery')) || [];
+            alert('Uploading photos... Please wait.');
 
-            // Proses setiap file yang di-upload
-            stagedFiles.forEach(file => {
-                const photoUrl = URL.createObjectURL(file);
-                const newPost = {
-                    id: Date.now() + Math.random(),
-                    url: photoUrl,
-                    name: guestName,
-                    likes: 0,
-                    comments: []
-                };
-                existingData.unshift(newPost); // Taruh di urutan paling atas
-            });
+            for (const file of stagedFiles) {
+                const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}_${file.name}`;
+                
+                const { data: uploadData, error: uploadError } = await supabaseClient.storage
+                    .from('photos')
+                    .upload(fileName, file);
 
-            localStorage.setItem('wedding_gallery', JSON.stringify(existingData));
+                if (uploadError) {
+                    console.error('Upload error:', uploadError.message);
+                    continue;
+                }
 
-            // Reset form
+                const { data: publicUrlData } = supabaseClient.storage
+                    .from('photos')
+                    .getPublicUrl(fileName);
+
+                const imageUrl = publicUrlData.publicUrl;
+
+                await supabaseClient.from('wedding_photos').insert([
+                    { image_url: imageUrl, guest_name: guestName, likes: 0, comments: [] }
+                ]);
+            }
+
             document.getElementById('guestName').value = '';
             document.getElementById('imagePreviewElement').classList.add('hidden');
             document.getElementById('previewPlaceholder').classList.remove('hidden');
@@ -190,46 +183,58 @@
             switchPage('gallery');
         }
 
-        function renderGallery() {
-            const galleryGrid = document.getElementById('galleryGrid');
-            let data = JSON.parse(localStorage.getItem('wedding_gallery'));
+        async function fetchLiveGallery() {
+            const { data, error } = await supabaseClient
+                .from('wedding_photos')
+                .select('*')
+                .order('created_at', { ascending: false });
 
-            // Jika belum ada data sama sekali, masukkan data default
-            if (!data) {
-                data = [
-                    { id: 1, url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80', name: 'Jessica', likes: 14, comments: [{user: 'Raka', text: 'Thank you for coming Jess! 🙌'}] },
-                    { id: 2, url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=80', name: 'Uncle David', likes: 8, comments: [{user: 'Cia', text: 'Thank you uncle! ❤️'}] }
-                ];
-                localStorage.setItem('wedding_gallery', JSON.stringify(data));
+            if (error) {
+                console.error('Error fetching gallery:', error);
+                return;
             }
 
+            renderGalleryGrid(data);
+        }
+
+        function renderGalleryGrid(items) {
+            const galleryGrid = document.getElementById('galleryGrid');
             galleryGrid.innerHTML = '';
-            data.forEach((item) => {
+
+            if (!items || items.length === 0) {
+                galleryGrid.innerHTML = '<p class="text-center text-gray-500 col-span-2">No photos yet. Be the first to upload!</p>';
+                return;
+            }
+
+            items.forEach((item) => {
                 const card = document.createElement('div');
                 card.className = "bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between p-3";
                 
-                let commentsHtml = item.comments.map(c => `<p><strong class="text-goldacc">${escapeHtml(c.user)}:</strong> ${escapeHtml(c.text)}</p>`).join('');
+                let commentsHtml = '';
+                if (item.comments && Array.isArray(item.comments)) {
+                    commentsHtml = item.comments.map(c => `<p><strong class="text-goldacc">${escapeHtml(c.user)}:</strong> ${escapeHtml(c.text)}</p>`).join('');
+                }
 
                 card.innerHTML = `
                     <div>
                         <div class="relative rounded-xl overflow-hidden aspect-[3/4] bg-black mb-3">
-                            <img src="${item.url}" class="w-full h-full object-cover disposable-filter" alt="Candid">
+                            <img src="${item.image_url}" class="w-full h-full object-cover disposable-filter" alt="Candid">
                             <span class="absolute top-2 right-2 bg-black/60 text-goldacc text-[10px] px-2 py-0.5 rounded-full backdrop-blur-md">Disposable Cam</span>
                         </div>
                         <div class="flex items-center justify-between px-1 mb-1">
-                            <h4 class="text-xs font-bold text-white tracking-wide">${escapeHtml(item.name)}</h4>
-                            <button onclick="handleLike(${item.id})" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
+                            <h4 class="text-xs font-bold text-white tracking-wide">${escapeHtml(item.guest_name)}</h4>
+                            <button onclick="handleLike(${item.id}, ${item.likes})" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
                                 <span>❤️</span> <span class="like-count">${item.likes}</span>
                             </button>
                         </div>
                     </div>
                     
                     <div class="mt-3 pt-3 border-t border-neutral-800 text-xs">
-                        <div class="space-y-1 mb-2 max-h-24 overflow-y-auto text-[11px] text-gray-300 comment-container">
+                        <div class="space-y-1 mb-2 max-h-24 overflow-y-auto text-[11px] text-gray-300">
                             ${commentsHtml}
                         </div>
                         <div class="flex gap-1">
-                            <input type="text" placeholder="Write a comment..." class="comment-input w-full px-2.5 py-1.5 border border-neutral-700 rounded-lg text-[11px] focus:outline-none focus:border-goldacc bg-black text-white placeholder-gray-500">
+                            <input type="text" placeholder="Write a comment..." class="w-full px-2.5 py-1.5 border border-neutral-700 rounded-lg text-[11px] focus:outline-none focus:border-goldacc bg-black text-white placeholder-gray-500">
                             <button onclick="addComment(${item.id}, this)" class="bg-goldacc text-black px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90 cursor-pointer">Post</button>
                         </div>
                     </div>
@@ -238,29 +243,54 @@
             });
         }
 
-        function handleLike(id) {
-            let data = JSON.parse(localStorage.getItem('wedding_gallery')) || [];
-            let item = data.find(d => d.id === id);
-            if(item) {
-                item.likes += 1;
-                localStorage.setItem('wedding_gallery', JSON.stringify(data));
-                renderGallery();
-            }
+        async function handleLike(id, currentLikes) {
+            const { error } = await supabaseClient
+                .from('wedding_photos')
+                .update({ likes: currentLikes + 1 })
+                .eq('id', id);
+
+            if (error) console.error('Error updating like:', error);
         }
 
-        function addComment(id, btn) {
+        async function addComment(id, btn) {
             const input = btn.previousElementSibling;
             const text = input.value.trim();
             if(!text) return;
 
-            let data = JSON.parse(localStorage.getItem('wedding_gallery')) || [];
-            let item = data.find(d => d.id === id);
-            if(item) {
-                item.comments.push({ user: 'Guest', text: text });
-                localStorage.setItem('wedding_gallery', JSON.stringify(data));
-                renderGallery();
+            const { data, error: fetchError } = await supabaseClient
+                .from('wedding_photos')
+                .select('comments')
+                .eq('id', id)
+                .single();
+
+            if (fetchError) {
+                console.error('Error fetching comments:', fetchError);
+                return;
+            }
+
+            let updatedComments = data.comments || [];
+            updatedComments.push({ user: 'Guest', text: text });
+
+            const { error: updateError } = await supabaseClient
+                .from('wedding_photos')
+                .update({ comments: updatedComments })
+                .eq('id', id);
+
+            if (updateError) {
+                console.error('Error adding comment:', updateError);
+            } else {
+                input.value = '';
             }
         }
+
+        supabaseClient
+            .channel('public:wedding_photos')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'wedding_photos' }, payload => {
+                if(document.getElementById('section-gallery').classList.contains('active')) {
+                    fetchLiveGallery();
+                }
+            })
+            .subscribe();
 
         function escapeHtml(text) {
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
