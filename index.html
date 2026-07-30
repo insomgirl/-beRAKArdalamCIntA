@@ -18,87 +18,93 @@
                         deepblack: '#121212',
                         charcoal: '#1A1A1A',
                         goldacc: '#D4AF37'
+                    },
+                    fontFamily: {
+                        cherolina: ['"Great Vibes"', '"Cherolina"', 'cursive', 'serif']
                     }
                 }
             }
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Memuat Google Fonts untuk gaya kaligrafi elegan ala Cherolina -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .font-serif { font-family: 'Playfair Display', serif; }
+        .font-cherolina { font-family: 'Great Vibes', cursive, serif; }
         .disposable-filter {
             filter: contrast(1.15) saturate(0.8) sepia(0.2);
         }
-        /* Mengatur perpindahan halaman section secara instan tanpa scroll kasar */
+        /* Kontrol Halaman Terisolasi */
         .page-section {
             display: none;
         }
         .page-section.active {
-            display: block;
+            display: flex;
         }
     </style>
 </head>
-<body class="bg-ivory text-charcoal antialiased">
+<body class="bg-ivory text-charcoal antialiased m-0 p-0 overflow-x-hidden">
 
-    <!-- BAGIAN 1: Landing Page -->
-    <div id="section-home" class="page-section active relative min-h-screen flex flex-col items-center justify-center text-center px-5 py-10 bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(247, 245, 240, 0.90), rgba(247, 245, 240, 0.98)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80')">
+    <!-- PAGE 1: Landing Page (Posisi Tepat di Tengah Halaman) -->
+    <div id="section-home" class="page-section active w-screen h-screen flex-col items-center justify-center text-center px-6 bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(247, 245, 240, 0.90), rgba(247, 245, 240, 0.98)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80')">
         
-        <span class="text-goldacc tracking-widest uppercase text-xs md:text-sm mb-2 font-semibold">The Wedding Of</span>
-        <h1 class="font-serif text-5xl md:text-6xl text-burgundy mb-2 tracking-tight">Raka & Cia</h1>
-        <p class="text-chocolate font-medium text-sm md:text-base mb-6">April 17, 2027</p>
-        
-        <div class="max-w-md mx-auto bg-deepblack/5 backdrop-blur-sm p-5 rounded-2xl border border-olive/30 shadow-sm mb-6">
-            <p class="font-serif italic text-burgundy text-sm md:text-base leading-relaxed">
-                "Thank you for being a part of our special day. Your love, presence, and blessings mean the world to us as we begin this new chapter together."
-            </p>
-            <p class="text-xs text-chocolate mt-2 font-semibold">— Raka & Cia</p>
-        </div>
+        <div class="max-w-md w-full mx-auto flex flex-col items-center justify-center">
+            <span class="text-goldacc tracking-widest uppercase text-xs md:text-sm mb-2 font-semibold">THE WEDDING OF</span>
+            <!-- Nama dengan font Cherolina / Kaligrafi Elegan -->
+            <h1 class="font-cherolina text-5xl md:text-7xl text-burgundy mb-2 tracking-wide">Raka & Cia</h1>
+            <p class="text-chocolate font-medium text-sm md:text-base mb-5">April 17, 2027</p>
+            
+            <div class="w-full bg-deepblack/5 backdrop-blur-sm p-4 md:p-5 rounded-2xl border border-olive/30 shadow-sm mb-5">
+                <p class="font-serif italic text-burgundy text-xs md:text-sm leading-relaxed">
+                    "Thank you for being a part of our special day. Your love, presence, and blessings mean the world to us as we begin this new chapter together."
+                </p>
+                <p class="text-[11px] text-chocolate mt-2 font-semibold">— Raka & Cia</p>
+            </div>
 
-        <p class="text-xs text-olive font-medium mb-5">✨ Share your candid moments and capture the day through your eyes!</p>
+            <p class="text-xs text-olive font-medium mb-5">✨ Share your candid moments and capture the day through your eyes!</p>
 
-        <!-- Tombol navigasi berpindah halaman (Tanpa Autoscroll) -->
-        <div class="flex flex-row gap-3 w-full max-w-sm justify-center">
-            <button onclick="switchPage('upload')" class="bg-olive text-ivory py-3 px-5 rounded-full font-medium shadow-md hover:bg-olive/90 transition text-xs sm:text-sm flex items-center justify-center gap-1.5 flex-1 text-center">
-                📸 Open Camera
-            </button>
-            <button onclick="switchPage('gallery')" class="border border-burgundy text-burgundy py-3 px-5 rounded-full font-medium hover:bg-burgundy hover:text-ivory transition text-xs sm:text-sm flex items-center justify-center gap-1.5 flex-1 text-center bg-ivory/50">
-                ✨ Live Gallery
-            </button>
+            <!-- Tombol Navigasi Terisolasi -->
+            <div class="flex flex-row gap-3 w-full justify-center">
+                <button onclick="switchPage('upload')" class="bg-olive text-ivory py-3 px-5 rounded-full font-medium shadow-md hover:bg-olive/90 transition text-xs sm:text-sm flex items-center justify-center gap-1.5 flex-1 text-center cursor-pointer">
+                    📸 Open Camera
+                </button>
+                <button onclick="switchPage('gallery')" class="border border-burgundy text-burgundy py-3 px-5 rounded-full font-medium hover:bg-burgundy hover:text-ivory transition text-xs sm:text-sm flex items-center justify-center gap-1.5 flex-1 text-center bg-ivory/50 cursor-pointer">
+                    ✨ Live Gallery
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- BAGIAN 2: Upload & Disposable Camera Filter (Halaman Terpisah) -->
-    <div id="section-upload" class="page-section min-h-screen py-16 px-4 bg-deepblack text-ivory flex flex-col justify-center items-center">
-        <div class="w-full max-w-md bg-chocolate p-6 sm:p-8 rounded-3xl shadow-xl border border-goldacc/30 relative">
-            <button onclick="switchPage('home')" class="absolute top-4 left-4 text-xs text-goldacc hover:underline flex items-center gap-1">← Back to Home</button>
+    <!-- PAGE 2: Upload & Disposable Camera Filter -->
+    <div id="section-upload" class="page-section w-screen min-h-screen py-10 px-4 bg-deepblack text-ivory flex-col justify-center items-center">
+        <div class="w-full max-w-md bg-chocolate p-6 sm:p-8 rounded-3xl shadow-xl border border-goldacc/30 relative my-auto">
+            <button onclick="switchPage('home')" class="absolute top-4 left-4 text-xs text-goldacc hover:underline flex items-center gap-1 cursor-pointer">← Back to Home</button>
             
             <div class="text-center mb-5 mt-4">
                 <span class="bg-goldacc/20 text-goldacc text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full">Disposable Cam Mode</span>
                 <h2 class="font-serif text-2xl text-ivory mt-2">Capture & Share</h2>
-                <p class="text-xs text-gray-300 mt-1">Pilih ambil foto langsung via kamera perangkat atau unggah dari galeri HP Anda.</p>
+                <p class="text-xs text-gray-300 mt-1">Ambil foto langsung dengan kamera atau unggah dari galeri Anda. Efek kamera vintage akan otomatis diterapkan!</p>
             </div>
             
-            <form id="uploadForm" class="space-y-4">
+            <form id="uploadForm" class="space-y-4" onsubmit="handlePhotoUpload(event)">
                 <div>
                     <label class="block text-xs font-medium text-goldacc mb-1">Your Name</label>
                     <input type="text" id="guestName" placeholder="e.g., Sarah & Family" class="w-full px-4 py-2.5 border border-goldacc/30 rounded-xl text-sm focus:outline-none focus:border-goldacc bg-deepblack text-ivory placeholder-gray-500" required>
                 </div>
 
-                <!-- Opsi Terpisah: Kamera Langsung vs Upload Galeri -->
+                <!-- Opsi Kamera Langsung vs Upload Galeri -->
                 <div class="grid grid-cols-2 gap-3">
-                    <!-- Tombol 1: Buka Kamera Langsung -->
                     <label class="flex flex-col items-center justify-center p-4 border-2 border-goldacc/30 border-dashed rounded-2xl cursor-pointer bg-chocolate/50 hover:bg-deepblack transition text-center">
                         <svg class="w-6 h-6 mb-1 text-goldacc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         <span class="text-[11px] text-gray-200 font-medium">Take Photo (Camera)</span>
-                        <input type="file" id="cameraFile" accept="image/*" capture="environment" class="hidden" onchange="previewFileName(this)">
+                        <input type="file" id="cameraFile" accept="image/*" capture="environment" class="hidden" onchange="previewFile(this)">
                     </label>
 
-                    <!-- Tombol 2: Pilih dari Galeri HP -->
                     <label class="flex flex-col items-center justify-center p-4 border-2 border-goldacc/30 border-dashed rounded-2xl cursor-pointer bg-chocolate/50 hover:bg-deepblack transition text-center">
                         <svg class="w-6 h-6 mb-1 text-goldacc" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                        <span class="text-[11px] text-gray-200 font-medium">Upload from Gallery</span>
-                        <input type="file" id="galleryFile" accept="image/*" class="hidden" onchange="previewFileName(this)">
+                        <span class="text-[11px] text-gray-200 font-medium">Upload Gallery</span>
+                        <input type="file" id="galleryFile" accept="image/*" class="hidden" onchange="previewFile(this)">
                     </label>
                 </div>
                 <p id="fileNameDisplay" class="text-[11px] text-goldacc font-medium text-center hidden"></p>
@@ -108,26 +114,30 @@
                     <input type="text" id="guestMessage" placeholder="e.g., Wishing you a lifetime of love! ✨" class="w-full px-4 py-2.5 border border-goldacc/30 rounded-xl text-sm focus:outline-none focus:border-goldacc bg-deepblack text-ivory placeholder-gray-500">
                 </div>
 
-                <button type="submit" class="w-full bg-goldacc text-deepblack font-bold py-3 rounded-xl text-sm shadow-md hover:bg-goldacc/90 transition">
+                <button type="submit" class="w-full bg-goldacc text-deepblack font-bold py-3 rounded-xl text-sm shadow-md hover:bg-goldacc/90 transition cursor-pointer">
                     Upload with Disposable Filter 📸
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- BAGIAN 3: Interactive Gallery (Halaman Terpisah) -->
-    <div id="section-gallery" class="page-section min-h-screen py-16 px-4 bg-deepblack text-ivory">
-        <div class="max-w-5xl mx-auto relative">
-            <button onclick="switchPage('home')" class="mb-6 text-xs text-goldacc hover:underline flex items-center gap-1">← Back to Home</button>
+    <!-- PAGE 3: Interactive Live Gallery -->
+    <div id="section-gallery" class="page-section w-screen min-h-screen py-12 px-4 bg-deepblack text-ivory flex-col justify-start">
+        <div class="max-w-5xl w-full mx-auto relative">
+            <div class="flex justify-between items-center mb-8">
+                <button onclick="switchPage('home')" class="text-xs text-goldacc hover:underline flex items-center gap-1 cursor-pointer">← Back to Home</button>
+                <button onclick="switchPage('upload')" class="bg-goldacc text-deepblack px-4 py-2 rounded-full text-xs font-bold hover:bg-goldacc/90 transition cursor-pointer">📸 Upload Another Photo</button>
+            </div>
 
             <div class="text-center mb-10">
                 <h2 class="font-serif text-3xl md:text-4xl text-ivory mb-2">Live Candid Album</h2>
                 <p class="text-xs md:text-sm text-gray-400">Explore moments captured through guest lenses. Like and leave comments on your favorite memories!</p>
             </div>
             
+            <!-- Grid Galeri Live Dinamis -->
             <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 
-                <!-- Kartu Foto 1 -->
+                <!-- Contoh Foto Default 1 -->
                 <div class="bg-chocolate p-3.5 rounded-2xl shadow-md border border-goldacc/20 flex flex-col justify-between">
                     <div>
                         <div class="overflow-hidden rounded-xl bg-black/40 mb-3 relative aspect-[4/5]">
@@ -136,7 +146,7 @@
                         </div>
                         <div class="flex items-center justify-between px-1 mb-1">
                             <h4 class="text-xs font-bold text-goldacc">Jessica & Partner</h4>
-                            <button onclick="handleLike(this)" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition">
+                            <button onclick="handleLike(this)" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
                                 <span>❤️</span> <span class="like-count">14</span>
                             </button>
                         </div>
@@ -149,12 +159,12 @@
                         </div>
                         <div class="flex gap-1">
                             <input type="text" placeholder="Write a comment..." class="w-full px-2.5 py-1.5 border border-goldacc/30 rounded-lg text-[11px] focus:outline-none focus:border-goldacc bg-deepblack text-ivory placeholder-gray-500">
-                            <button onclick="addComment(this)" class="bg-goldacc text-deepblack px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90">Post</button>
+                            <button onclick="addComment(this)" class="bg-goldacc text-deepblack px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90 cursor-pointer">Post</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Kartu Foto 2 -->
+                <!-- Contoh Foto Default 2 -->
                 <div class="bg-chocolate p-3.5 rounded-2xl shadow-md border border-goldacc/20 flex flex-col justify-between">
                     <div>
                         <div class="overflow-hidden rounded-xl bg-black/40 mb-3 relative aspect-[4/5]">
@@ -163,7 +173,7 @@
                         </div>
                         <div class="flex items-center justify-between px-1 mb-1">
                             <h4 class="text-xs font-bold text-goldacc">Uncle David</h4>
-                            <button onclick="handleLike(this)" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition">
+                            <button onclick="handleLike(this)" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
                                 <span>❤️</span> <span class="like-count">8</span>
                             </button>
                         </div>
@@ -176,7 +186,7 @@
                         </div>
                         <div class="flex gap-1">
                             <input type="text" placeholder="Write a comment..." class="w-full px-2.5 py-1.5 border border-goldacc/30 rounded-lg text-[11px] focus:outline-none focus:border-goldacc bg-deepblack text-ivory placeholder-gray-500">
-                            <button onclick="addComment(this)" class="bg-goldacc text-deepblack px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90">Post</button>
+                            <button onclick="addComment(this)" class="bg-goldacc text-deepblack px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90 cursor-pointer">Post</button>
                         </div>
                     </div>
                 </div>
@@ -185,9 +195,10 @@
         </div>
     </div>
 
-    <!-- JavaScript Navigasi & Interaksi -->
+    <!-- JavaScript Navigasi & Live Update Handler -->
     <script>
-        // Fungsi untuk berpindah halaman tanpa autoscroll kasar
+        let stagedFileUrl = null;
+
         function switchPage(pageId) {
             const sections = document.querySelectorAll('.page-section');
             sections.forEach(sec => sec.classList.remove('active'));
@@ -199,15 +210,65 @@
             }
         }
 
-        let selectedFileObj = null;
-
-        function previewFileName(input) {
+        function previewFile(input) {
             const display = document.getElementById('fileNameDisplay');
             if (input.files && input.files[0]) {
-                selectedFileObj = input.files[0];
-                display.textContent = "Selected: " + selectedFileObj.name;
+                stagedFileUrl = URL.createObjectURL(input.files[0]);
+                display.textContent = "Selected: " + input.files[0].name;
                 display.classList.remove('hidden');
+
+                // Reset input counterpart agar tidak bentrok
+                if(input.id === 'cameraFile') document.getElementById('galleryFile').value = '';
+                if(input.id === 'galleryFile') document.getElementById('cameraFile').value = '';
             }
+        }
+
+        function handlePhotoUpload(e) {
+            e.preventDefault();
+            const guestName = document.getElementById('guestName').value.trim() || 'Anonymous Guest';
+            const guestMessage = document.getElementById('guestMessage').value.trim() || 'Special moment captured! ✨';
+
+            // Gunakan gambar yang di-upload atau fallback ke gambar default jika belum pilih file
+            const photoUrl = stagedFileUrl || 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80';
+
+            // Buat elemen card galeri baru secara dinamis
+            const galleryGrid = document.getElementById('galleryGrid');
+            const newCard = document.createElement('div');
+            newCard.className = "bg-chocolate p-3.5 rounded-2xl shadow-md border border-goldacc/20 flex flex-col justify-between";
+            newCard.innerHTML = `
+                <div>
+                    <div class="overflow-hidden rounded-xl bg-black/40 mb-3 relative aspect-[4/5]">
+                        <img src="${photoUrl}" alt="Candid Guest Photo" class="w-full h-full object-cover disposable-filter">
+                        <span class="absolute top-2 right-2 bg-black/70 text-goldacc text-[10px] px-2.5 py-0.5 rounded-full backdrop-blur-md">Disposable Cam</span>
+                    </div>
+                    <div class="flex items-center justify-between px-1 mb-1">
+                        <h4 class="text-xs font-bold text-goldacc">${escapeHtml(guestName)}</h4>
+                        <button onclick="handleLike(this)" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
+                            <span>❤️</span> <span class="like-count">0</span>
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-300 px-1 italic">"${escapeHtml(guestMessage)}"</p>
+                </div>
+                
+                <div class="mt-4 pt-3 border-t border-goldacc/20 text-xs">
+                    <div class="space-y-1 mb-2 max-h-20 overflow-y-auto text-[11px] text-gray-300"></div>
+                    <div class="flex gap-1">
+                        <input type="text" placeholder="Write a comment..." class="w-full px-2.5 py-1.5 border border-goldacc/30 rounded-lg text-[11px] focus:outline-none focus:border-goldacc bg-deepblack text-ivory placeholder-gray-500">
+                        <button onclick="addComment(this)" class="bg-goldacc text-deepblack px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90 cursor-pointer">Post</button>
+                    </div>
+                </div>
+            `;
+
+            // Masukkan foto baru ke posisi paling atas galeri agar langsung terlihat secara real-time
+            galleryGrid.insertBefore(newCard, galleryGrid.firstChild);
+
+            // Reset form dan state file
+            document.getElementById('uploadForm').reset();
+            document.getElementById('fileNameDisplay').classList.add('hidden');
+            stagedFileUrl = null;
+
+            // Langsung arahkan (redirect) ke Page 3 (Live Gallery)
+            switchPage('gallery');
         }
 
         function handleLike(btn) {
@@ -225,19 +286,14 @@
 
             const commentList = container.parentElement.previousElementSibling;
             const newP = document.createElement('p');
-            newP.innerHTML = `<strong class="text-goldacc">Guest:</strong> ${commentText}`;
+            newP.innerHTML = `<strong class="text-goldacc">Guest:</strong> ${escapeHtml(commentText)}`;
             commentList.appendChild(newP);
             container.value = '';
         }
 
-        document.getElementById('uploadForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Photo successfully uploaded with the disposable camera filter!');
-            this.reset();
-            document.getElementById('fileNameDisplay').classList.add('hidden');
-            selectedFileObj = null;
-            switchPage('gallery'); // Langsung arahkan ke galeri setelah upload
-        });
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
     </script>
 </body>
 </html>
