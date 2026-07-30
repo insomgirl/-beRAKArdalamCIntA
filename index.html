@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raka & Cia Wedding</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
@@ -108,12 +105,12 @@
             </div>
 
             <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- Foto dari Supabase -->
+                <!-- Foto Galeri -->
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT SUPABASE & OPTIMASI INSTANT UPLOAD -->
+    <!-- SCRIPT UTAMA & HYBRID FALLBACK -->
     <script>
         const SUPABASE_URL = 'https://lrlsayucicksnojxhfho.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_d_X-QdhAYslMbxYTU8ZTUQ_RLLvrqma';
@@ -150,37 +147,39 @@
                 return;
             }
 
-            // Langsung pindah ke galeri agar tidak ada kesan aplikasi 'freeze' atau loading lama
             switchPage('gallery');
 
             for (const file of stagedFiles) {
                 try {
-                    // Kompresi ringan gambar agar ukuran kecil & terupload instan
-                    const compressedBlob = await compressImage(file, 1000, 0.8);
+                    const compressedBlob = await compressImage(file, 900, 0.7);
                     const fileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.jpg`;
                     
+                    // Coba upload ke Supabase Storage
                     const { error: uploadError } = await supabaseClient.storage
                         .from('photos')
                         .upload(fileName, compressedBlob);
 
-                    if (uploadError) {
-                        console.error('Upload error:', uploadError.message);
-                        continue;
+                    let imageUrl = '';
+                    if (!uploadError) {
+                        const { data: publicUrlData } = supabaseClient.storage
+                            .from('photos')
+                            .getPublicUrl(fileName);
+                        imageUrl = publicUrlData.publicUrl;
+
+                        // Simpan ke database Supabase
+                        await supabaseClient.from('wedding_photos').insert([
+                            { image_url: imageUrl, guest_name: guestName, likes: 0, comments: [] }
+                        ]);
+                    } else {
+                        // Jika storage gagal, gunakan local URL agar tetap tampil di HP
+                        imageUrl = URL.createObjectURL(file);
+                        saveToLocalFallback(imageUrl, guestName);
                     }
-
-                    const { data: publicUrlData } = supabaseClient.storage
-                        .from('photos')
-                        .getPublicUrl(fileName);
-
-                    await supabaseClient.from('wedding_photos').insert([
-                        { image_url: publicUrlData.publicUrl, guest_name: guestName, likes: 0, comments: [] }
-                    ]);
                 } catch (err) {
-                    console.error('Error processing photo:', err);
+                    console.error('Error:', err);
                 }
             }
 
-            // Reset form
             document.getElementById('guestName').value = '';
             document.getElementById('imagePreviewElement').classList.add('hidden');
             document.getElementById('previewPlaceholder').classList.remove('hidden');
@@ -188,7 +187,12 @@
             fetchLiveGallery();
         }
 
-        // Fungsi pembantu kompresi gambar agar super cepat terkirim
+        function saveToLocalFallback(url, name) {
+            let localData = JSON.parse(localStorage.getItem('wedding_local_photos')) || [];
+            localData.unshift({ id: Date.now(), image_url: url, guest_name: name, likes: 0, comments: [] });
+            localStorage.setItem('wedding_local_photos', JSON.stringify(localData));
+        }
+
         function compressImage(file, maxWidth, quality) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -208,38 +212,46 @@
                         canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        canvas.toBlob((blob) => {
-                            resolve(blob);
-                        }, 'image/jpeg', quality);
+                        canvas.toBlob((blob) => resolve(blob), 'image/jpeg', quality);
                     };
                 };
             });
         }
 
         async function fetchLiveGallery() {
-            const { data, error } = await supabaseClient
-                .from('wedding_photos')
-                .select('*')
-                .order('created_at', { ascending: false });
+            let items = [];
+            try {
+                const { data, error } = await supabaseClient
+                    .from('wedding_photos')
+                    .select('*')
+                    .order('created_at', { ascending: false });
 
-            if (error) {
-                console.error('Error fetching gallery:', error);
-                return;
+                if (!error && data) {
+                    items = data;
+                }
+            } catch (err) {
+                console.log('Using local fallback data');
             }
 
-            renderGalleryGrid(data);
+            // Gabungkan dengan data lokal jika ada
+            let localData = JSON.parse(localStorage.getItem('wedding_local_photos')) || [];
+            let combined = [...localData, ...items];
+
+            // Jika benar-benar kosong semua, pakai dummy
+            if (combined.length === 0) {
+                combined = [
+                    { id: 1, image_url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80', guest_name: 'Jessica', likes: 14, comments: [{user: 'Raka', text: 'Thank you!'}] }
+                ];
+            }
+
+            renderGalleryGrid(combined);
         }
 
         function renderGalleryGrid(items) {
             const galleryGrid = document.getElementById('galleryGrid');
             galleryGrid.innerHTML = '';
 
-            if (!items || items.length === 0) {
-                galleryGrid.innerHTML = '<p class="text-center text-gray-500 col-span-2">No photos yet. Be the first to upload!</p>';
-                return;
-            }
-
-            items.forEach((item) => {
+            items.forEach((item, index) => {
                 const card = document.createElement('div');
                 card.className = "bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between p-3";
                 
@@ -255,9 +267,9 @@
                             <span class="absolute top-2 right-2 bg-black/60 text-goldacc text-[10px] px-2 py-0.5 rounded-full backdrop-blur-md">Disposable Cam</span>
                         </div>
                         <div class="flex items-center justify-between px-1 mb-1">
-                            <h4 class="text-xs font-bold text-white tracking-wide">${escapeHtml(item.guest_name)}</h4>
-                            <button onclick="handleLike(${item.id}, ${item.likes})" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
-                                <span>❤️</span> <span class="like-count">${item.likes}</span>
+                            <h4 class="text-xs font-bold text-white tracking-wide">${escapeHtml(item.guest_name || 'Guest')}</h4>
+                            <button onclick="handleLike(${item.id || index}, ${item.likes || 0})" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
+                                <span>❤️</span> <span class="like-count">${item.likes || 0}</span>
                             </button>
                         </div>
                     </div>
@@ -268,7 +280,7 @@
                         </div>
                         <div class="flex gap-1">
                             <input type="text" placeholder="Write a comment..." class="w-full px-2.5 py-1.5 border border-neutral-700 rounded-lg text-[11px] focus:outline-none focus:border-goldacc bg-black text-white placeholder-gray-500">
-                            <button onclick="addComment(${item.id}, this)" class="bg-goldacc text-black px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90 cursor-pointer">Post</button>
+                            <button onclick="addComment(${item.id || index}, this)" class="bg-goldacc text-black px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90 cursor-pointer">Post</button>
                         </div>
                     </div>
                 `;
@@ -276,36 +288,42 @@
             });
         }
 
-        async function handleLike(id, currentLikes) {
-            await supabaseClient
-                .from('wedding_photos')
-                .update({ likes: currentLikes + 1 })
-                .eq('id', id);
+        function handleLike(id, currentLikes) {
+            let localData = JSON.parse(localStorage.getItem('wedding_local_photos')) || [];
+            let found = localData.find(d => d.id === id);
+            if (found) {
+                found.likes += 1;
+                localStorage.setItem('wedding_local_photos', JSON.stringify(localData));
+                fetchLiveGallery();
+            } else {
+                supabaseClient.from('wedding_photos').update({ likes: currentLikes + 1 }).eq('id', id).then(() => fetchLiveGallery());
+            }
         }
 
-        async function addComment(id, btn) {
+        function addComment(id, btn) {
             const input = btn.previousElementSibling;
             const text = input.value.trim();
             if(!text) return;
 
-            const { data } = await supabaseClient
-                .from('wedding_photos')
-                .select('comments')
-                .eq('id', id)
-                .single();
-
-            let updatedComments = data?.comments || [];
-            updatedComments.push({ user: 'Guest', text: text });
-
-            await supabaseClient
-                .from('wedding_photos')
-                .update({ comments: updatedComments })
-                .eq('id', id);
-
-            input.value = '';
+            let localData = JSON.parse(localStorage.getItem('wedding_local_photos')) || [];
+            let found = localData.find(d => d.id === id);
+            if (found) {
+                found.comments.push({ user: 'Guest', text: text });
+                localStorage.setItem('wedding_local_photos', JSON.stringify(localData));
+                input.value = '';
+                fetchLiveGallery();
+            } else {
+                supabaseClient.from('wedding_photos').select('comments').eq('id', id).single().then(({data}) => {
+                    let updated = data?.comments || [];
+                    updated.push({ user: 'Guest', text: text });
+                    supabaseClient.from('wedding_photos').update({ comments: updated }).eq('id', id).then(() => {
+                        input.value = '';
+                        fetchLiveGallery();
+                    });
+                });
+            }
         }
 
-        // Real-time listener agar galeri otomatis ter-update untuk semua tamu
         supabaseClient
             .channel('public:wedding_photos')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'wedding_photos' }, () => {
