@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raka & Cia Wedding</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -34,17 +33,13 @@
         .disposable-filter {
             filter: contrast(1.15) saturate(0.8) sepia(0.2);
         }
-        .page-section {
-            display: none;
-        }
-        .page-section.active {
-            display: flex;
-        }
+        .page-section { display: none; }
+        .page-section.active { display: flex; }
     </style>
 </head>
 <body class="m-0 p-0 overflow-x-hidden antialiased">
 
-    <!-- PAGE 1: Landing Page (Posisi Tengah) -->
+    <!-- PAGE 1: Landing Page -->
     <div id="section-home" class="page-section active w-screen h-screen flex-col items-center justify-center text-center px-6 bg-cover bg-center" style="background-image: linear-gradient(to bottom, rgba(247, 245, 240, 0.90), rgba(247, 245, 240, 0.98)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80')">
         <div class="max-w-md w-full mx-auto flex flex-col items-center justify-center text-charcoal">
             <span class="text-goldacc tracking-widest uppercase text-xs md:text-sm mb-2 font-semibold">THE WEDDING OF</span>
@@ -71,108 +66,69 @@
         </div>
     </div>
 
-    <!-- PAGE 2: Disposable Camera View (Ala Foto Referensi 1) -->
+    <!-- PAGE 2: Camera View (Multi-upload & Bersih tanpa label atas) -->
     <div id="section-upload" class="page-section w-screen h-screen flex-col justify-between bg-black text-white p-5 relative">
-        <!-- Top Bar Camera -->
         <div class="flex justify-between items-center z-10 pt-2">
             <button onclick="switchPage('home')" class="text-xs bg-white/20 px-3 py-1.5 rounded-full backdrop-blur-md cursor-pointer">✕ Close</button>
             <div class="text-center">
                 <p class="text-xs font-serif font-bold tracking-wider">Raka & Cia Wedding day</p>
-                <span class="text-[9px] text-gray-400">1d 6h left</span>
             </div>
             <div class="w-10"></div>
         </div>
 
-        <!-- Viewfinder Kamera Tengah -->
         <div class="w-full max-w-sm mx-auto flex-1 flex flex-col justify-center items-center py-2">
             <div id="viewfinderBox" class="w-full aspect-[3/4] bg-neutral-900 rounded-3xl overflow-hidden relative border border-white/10 shadow-2xl flex items-center justify-center">
-                <!-- Tampilan Preview / Placeholder Lensa -->
                 <div id="previewPlaceholder" class="text-center p-6">
                     <svg class="w-12 h-12 mx-auto text-gray-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/></svg>
                     <p class="text-xs text-gray-400">Tap shutter below to snap or load from gallery</p>
                 </div>
                 <img id="imagePreviewElement" class="w-full h-full object-cover disposable-filter hidden" alt="Preview">
-                <span class="absolute top-3 right-3 bg-black/50 text-[10px] text-goldacc px-2.5 py-0.5 rounded-full backdrop-blur-md">Disposable Cam</span>
             </div>
         </div>
 
-        <!-- Bottom Controls & Shutter -->
         <div class="w-full max-w-sm mx-auto pb-4 space-y-3">
             <input type="text" id="guestName" placeholder="Your Name (e.g., Sarah)" class="w-full px-4 py-2 bg-neutral-900 border border-neutral-700 rounded-xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-goldacc text-center" required>
             
             <div class="flex items-center justify-around">
-                <!-- Tombol Galeri -->
+                <!-- Tombol pilih banyak foto dari galeri (multiple) -->
                 <label class="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center cursor-pointer border border-neutral-700 hover:bg-neutral-700 transition" title="Upload from Gallery">
                     📁
-                    <input type="file" id="galleryFile" accept="image/*" class="hidden" onchange="handleFileSelect(this)">
+                    <input type="file" id="galleryFile" accept="image/*" multiple class="hidden" onchange="handleFileSelect(this)">
                 </label>
 
-                <!-- Tombol Shutter Kamera Utama -->
+                <!-- Tombol Shutter Kamera (bisa ambil foto/multi) -->
                 <label class="w-16 h-16 rounded-full border-4 border-white flex items-center justify-center cursor-pointer p-1 bg-transparent hover:scale-105 transition">
                     <div class="w-12 h-12 bg-white rounded-full"></div>
-                    <input type="file" id="cameraFile" accept="image/*" capture="environment" class="hidden" onchange="handleFileSelect(this)">
+                    <input type="file" id="cameraFile" accept="image/*" capture="environment" multiple class="hidden" onchange="handleFileSelect(this)">
                 </label>
 
-                <!-- Tombol Submit / Kirim -->
-                <button onclick="submitPhoto()" class="w-10 h-10 rounded-full bg-goldacc text-black flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-goldacc/90 transition" title="Send Photo">
+                <!-- Tombol Kirim -->
+                <button onclick="submitPhotos()" class="w-10 h-10 rounded-full bg-goldacc text-black flex items-center justify-center font-bold text-xs cursor-pointer hover:bg-goldacc/90 transition" title="Send Photos">
                     ✓
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- PAGE 3: Live Shared Gallery Grid (Ala Foto Referensi 2) -->
+    <!-- PAGE 3: Live Shared Gallery Grid dengan Komentar & Like Aktif -->
     <div id="section-gallery" class="page-section w-screen min-h-screen bg-black text-white flex-col justify-start p-3 sm:p-5">
         <div class="max-w-4xl w-full mx-auto relative pt-2">
-            <!-- Header Galeri -->
             <div class="flex justify-between items-center mb-4 px-2">
                 <button onclick="switchPage('home')" class="text-xs bg-neutral-800 text-gray-300 px-3 py-1.5 rounded-full backdrop-blur-md cursor-pointer hover:bg-neutral-700">← Home</button>
                 <h2 class="font-serif text-sm md:text-base tracking-widest uppercase text-goldacc">Live Shared Gallery</h2>
                 <button onclick="switchPage('upload')" class="text-xs bg-goldacc text-black px-3 py-1.5 rounded-full font-bold cursor-pointer hover:bg-goldacc/90">+ Camera</button>
             </div>
 
-            <!-- Grid Kolase Rapat (Full Grid ala Referensi 2) -->
-            <div id="galleryGrid" class="grid grid-cols-2 gap-2 sm:gap-3">
-                
-                <!-- Kartu Grid 1 -->
-                <div class="relative rounded-2xl overflow-hidden aspect-[3/4] bg-neutral-900 border border-neutral-800 shadow-lg group">
-                    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover disposable-filter" alt="Candid">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-between p-3">
-                        <div class="flex justify-end">
-                            <button onclick="handleLike(this)" class="bg-black/40 backdrop-blur-md px-2 py-1 rounded-full text-[10px] text-white flex items-center gap-1 cursor-pointer">
-                                <span>❤️</span> <span class="like-count">14</span>
-                            </button>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-white tracking-wide">Jessica</p>
-                            <p class="text-[10px] text-gray-300 italic truncate">"Such a lovely wedding setup! 🥰"</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Kartu Grid 2 -->
-                <div class="relative rounded-2xl overflow-hidden aspect-[3/4] bg-neutral-900 border border-neutral-800 shadow-lg group">
-                    <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover disposable-filter" alt="Candid">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-between p-3">
-                        <div class="flex justify-end">
-                            <button onclick="handleLike(this)" class="bg-black/40 backdrop-blur-md px-2 py-1 rounded-full text-[10px] text-white flex items-center gap-1 cursor-pointer">
-                                <span>❤️</span> <span class="like-count">8</span>
-                            </button>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-white tracking-wide">Uncle David</p>
-                            <p class="text-[10px] text-gray-300 italic truncate">"Cheers to Raka & Cia!"</p>
-                        </div>
-                    </div>
-                </div>
-
+            <!-- Grid Galeri -->
+            <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Konten Galeri dimuat dinamis dari localStorage -->
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Logika & Interaksi -->
+    <!-- JavaScript Logika & Sinkronisasi Real-Time -->
     <script>
-        let currentFileUrl = null;
+        let stagedFiles = [];
 
         function switchPage(pageId) {
             const sections = document.querySelectorAll('.page-section');
@@ -182,68 +138,128 @@
             if (target) {
                 target.classList.add('active');
                 window.scrollTo(0, 0);
+                if(pageId === 'gallery') renderGallery();
             }
         }
 
         function handleFileSelect(input) {
-            if (input.files && input.files[0]) {
-                currentFileUrl = URL.createObjectURL(input.files[0]);
+            if (input.files && input.files.length > 0) {
+                stagedFiles = Array.from(input.files);
                 
                 const previewImg = document.getElementById('imagePreviewElement');
                 const placeholder = document.getElementById('previewPlaceholder');
                 
-                previewImg.src = currentFileUrl;
+                // Tampilkan preview foto pertama yang dipilih
+                previewImg.src = URL.createObjectURL(stagedFiles[0]);
                 previewImg.classList.remove('hidden');
                 placeholder.classList.add('hidden');
-
-                if(input.id === 'cameraFile') document.getElementById('galleryFile').value = '';
-                if(input.id === 'galleryFile') document.getElementById('cameraFile').value = '';
             }
         }
 
-        function submitPhoto() {
+        function submitPhotos() {
             const guestName = document.getElementById('guestName').value.trim() || 'Guest';
             
-            if (!currentFileUrl) {
-                alert('Please take a photo or choose from gallery first!');
+            if (stagedFiles.length === 0) {
+                alert('Please take or select at least one photo first!');
                 return;
             }
 
-            const galleryGrid = document.getElementById('galleryGrid');
-            const newCard = document.createElement('div');
-            newCard.className = "relative rounded-2xl overflow-hidden aspect-[3/4] bg-neutral-900 border border-neutral-800 shadow-lg group";
-            newCard.innerHTML = `
-                <img src="${currentFileUrl}" class="w-full h-full object-cover disposable-filter" alt="Candid">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-between p-3">
-                    <div class="flex justify-end">
-                        <button onclick="handleLike(this)" class="bg-black/40 backdrop-blur-md px-2 py-1 rounded-full text-[10px] text-white flex items-center gap-1 cursor-pointer">
-                            <span>❤️</span> <span class="like-count">0</span>
-                        </button>
-                    </div>
-                    <div>
-                        <p class="text-xs font-bold text-white tracking-wide">${escapeHtml(guestName)}</p>
-                        <p class="text-[10px] text-gray-300 italic truncate">"Wonderful moment! ✨"</p>
-                    </div>
-                </div>
-            `;
+            let existingData = JSON.parse(localStorage.getItem('wedding_gallery')) || [];
 
-            galleryGrid.insertBefore(newCard, galleryGrid.firstChild);
+            // Proses setiap file yang di-upload
+            stagedFiles.forEach(file => {
+                const photoUrl = URL.createObjectURL(file);
+                const newPost = {
+                    id: Date.now() + Math.random(),
+                    url: photoUrl,
+                    name: guestName,
+                    likes: 0,
+                    comments: []
+                };
+                existingData.unshift(newPost); // Taruh di urutan paling atas
+            });
 
-            // Reset state & pindah ke Page 3 (Live Gallery)
+            localStorage.setItem('wedding_gallery', JSON.stringify(existingData));
+
+            // Reset form
             document.getElementById('guestName').value = '';
             document.getElementById('imagePreviewElement').classList.add('hidden');
             document.getElementById('previewPlaceholder').classList.remove('hidden');
-            currentFileUrl = null;
+            stagedFiles = [];
 
             switchPage('gallery');
         }
 
-        function handleLike(btn) {
-            const countSpan = btn.querySelector('.like-count');
-            let currentLikes = parseInt(countSpan.textContent);
-            countSpan.textContent = currentLikes + 1;
-            btn.classList.add('text-red-400', 'scale-110');
-            setTimeout(() => btn.classList.remove('scale-110'), 200);
+        function renderGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            let data = JSON.parse(localStorage.getItem('wedding_gallery'));
+
+            // Jika belum ada data sama sekali, masukkan data default
+            if (!data) {
+                data = [
+                    { id: 1, url: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80', name: 'Jessica', likes: 14, comments: [{user: 'Raka', text: 'Thank you for coming Jess! 🙌'}] },
+                    { id: 2, url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=80', name: 'Uncle David', likes: 8, comments: [{user: 'Cia', text: 'Thank you uncle! ❤️'}] }
+                ];
+                localStorage.setItem('wedding_gallery', JSON.stringify(data));
+            }
+
+            galleryGrid.innerHTML = '';
+            data.forEach((item) => {
+                const card = document.createElement('div');
+                card.className = "bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between p-3";
+                
+                let commentsHtml = item.comments.map(c => `<p><strong class="text-goldacc">${escapeHtml(c.user)}:</strong> ${escapeHtml(c.text)}</p>`).join('');
+
+                card.innerHTML = `
+                    <div>
+                        <div class="relative rounded-xl overflow-hidden aspect-[3/4] bg-black mb-3">
+                            <img src="${item.url}" class="w-full h-full object-cover disposable-filter" alt="Candid">
+                            <span class="absolute top-2 right-2 bg-black/60 text-goldacc text-[10px] px-2 py-0.5 rounded-full backdrop-blur-md">Disposable Cam</span>
+                        </div>
+                        <div class="flex items-center justify-between px-1 mb-1">
+                            <h4 class="text-xs font-bold text-white tracking-wide">${escapeHtml(item.name)}</h4>
+                            <button onclick="handleLike(${item.id})" class="flex items-center gap-1 text-xs text-gray-300 hover:text-red-400 transition cursor-pointer">
+                                <span>❤️</span> <span class="like-count">${item.likes}</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 pt-3 border-t border-neutral-800 text-xs">
+                        <div class="space-y-1 mb-2 max-h-24 overflow-y-auto text-[11px] text-gray-300 comment-container">
+                            ${commentsHtml}
+                        </div>
+                        <div class="flex gap-1">
+                            <input type="text" placeholder="Write a comment..." class="comment-input w-full px-2.5 py-1.5 border border-neutral-700 rounded-lg text-[11px] focus:outline-none focus:border-goldacc bg-black text-white placeholder-gray-500">
+                            <button onclick="addComment(${item.id}, this)" class="bg-goldacc text-black px-3 py-1.5 rounded-lg text-[11px] font-bold hover:bg-goldacc/90 cursor-pointer">Post</button>
+                        </div>
+                    </div>
+                `;
+                galleryGrid.appendChild(card);
+            });
+        }
+
+        function handleLike(id) {
+            let data = JSON.parse(localStorage.getItem('wedding_gallery')) || [];
+            let item = data.find(d => d.id === id);
+            if(item) {
+                item.likes += 1;
+                localStorage.setItem('wedding_gallery', JSON.stringify(data));
+                renderGallery();
+            }
+        }
+
+        function addComment(id, btn) {
+            const input = btn.previousElementSibling;
+            const text = input.value.trim();
+            if(!text) return;
+
+            let data = JSON.parse(localStorage.getItem('wedding_gallery')) || [];
+            let item = data.find(d => d.id === id);
+            if(item) {
+                item.comments.push({ user: 'Guest', text: text });
+                localStorage.setItem('wedding_gallery', JSON.stringify(data));
+                renderGallery();
+            }
         }
 
         function escapeHtml(text) {
